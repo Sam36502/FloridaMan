@@ -3,7 +3,6 @@ package ch.longschlong.floridaman.controller;
 import ch.longschlong.floridaman.service.FloridaManService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +21,7 @@ public class FloridaManController {
     // Returns 'HTTP OK' when registered successfully
     // Returns 'HTTP BAD_REQUEST' when name already taken
     @PostMapping("/connect")
-    public HttpStatus registerUser(@RequestParam(name="nick") String nickname) {
+    public HttpStatus registerUser(@RequestParam(name="name") String nickname) {
 
         return HttpStatus.OK;
     }
@@ -32,7 +31,7 @@ public class FloridaManController {
     // Returns 'HTTP BAD_REQUEST' if it's not the player's turn
     @PostMapping("/floridaman")
     public HttpStatus submitWord(
-            @RequestParam(name="player") String playerNick,
+            @RequestParam(name="name") String playerNick,
             @RequestParam(name="word") String word
     ) {
 
