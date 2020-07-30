@@ -38,7 +38,7 @@ public class FloridaManController {
     // Returns 'HTTP BAD_REQUEST' if the player isn't present or the request is invalid
     @DeleteMapping("/connect")
     public HttpStatus deregisterUser(@RequestParam(name="name") String name) {
-        if (floridaManService.playerExists(name)) {
+        if (!floridaManService.playerExists(name)) {
             return HttpStatus.BAD_REQUEST;
         }
 

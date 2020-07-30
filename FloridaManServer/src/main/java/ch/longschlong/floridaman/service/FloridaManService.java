@@ -8,7 +8,7 @@ import java.util.List;
 @Service("floridaman")
 public class FloridaManService {
 
-    private static final String BEGINNING = "Florida Man ";
+    private static final String BEGINNING = "Florida Man";
 
 
     private List<String> playerNames = new ArrayList<>();
@@ -51,19 +51,29 @@ public class FloridaManService {
 
         // Check if round terminated
         if (".".equals(trimmedWord)) {
-
-            // TODO[DEBUG]:
-            System.out.println("Player '" + name + "' has terminated the round.");
-            System.out.println("Final Sentence: " + currentSentence);
-
             currentSentence.append('.');
-            return;
+            // TODO[DEBUG]:
+            System.out.println("Sentence Finished: " + currentSentence);
+
+            // TODO: Send finished sentence to archive API
+
+
+            currentSentence = new StringBuilder(BEGINNING);
+
+        // Append word to sentence
+        } else {
+            currentSentence.append(' ').append(trimmedWord);
         }
 
-        // Append word to current Sentence
+        // Move to next player
+        currPlayerIndex++;
+        if (currPlayerIndex == playerNames.size()) {
+            currPlayerIndex = 0;
+        }
         // TODO[DEBUG]:
-        System.out.println("Player '" + name + "' submitted '" + trimmedWord + "'.");
-        currentSentence.append(trimmedWord).append(' ');
+        System.out.println("It's now " + playerNames.get(currPlayerIndex) + "'s turn.");
+
+        // TODO: Refresh screen
     }
 
     // Checks if a name has already been registered
