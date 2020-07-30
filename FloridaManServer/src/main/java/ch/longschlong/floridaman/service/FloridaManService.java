@@ -13,23 +13,53 @@ public class FloridaManService {
 
     private List<String> playerNames = new ArrayList<>();
 
+    private int currPlayerIndex = -1;
+
     private StringBuilder currentSentence = new StringBuilder(BEGINNING);
 
 
     // Registers a new player in the list
     public void registerPlayer(final String name) {
+
+        // TODO[DEBUG]:
         System.out.println("Player '" + name + "' has joined the game!");
+
         playerNames.add(name);
     }
 
     // Submits a word for the given user
     public void submitWord(final String name, final String word) {
+        String trimmedWord = word.trim();
 
+        // Check if round terminated
+        if (".".equals(trimmedWord)) {
+
+            // TODO[DEBUG]:
+            System.out.println("Player '" + name + "' has terminated the round.");
+            System.out.println("Final Sentence: " + currentSentence);
+
+            currentSentence.append('.');
+            return;
+        }
+
+        // Append word to current Sentence
+        // TODO[DEBUG]:
+        System.out.println("Player '" + name + "' submitted '" + trimmedWord + "'.");
+        currentSentence.append(trimmedWord).append(' ');
     }
 
     // Checks if a name has already been registered
     public boolean playerExists(final String name) {
         return playerNames.contains(name);
+    }
+
+    // Returns the name of the current player whose turn it is
+    public String whoseTurn() {
+        if (currPlayerIndex < 0 || currPlayerIndex >= playerNames.size()) {
+            return "nobody";
+        } else {
+            return playerNames.get(currPlayerIndex);
+        }
     }
 
 }
