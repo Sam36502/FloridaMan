@@ -13,17 +13,23 @@ public class FloridaManService {
 
     private List<String> playerNames = new ArrayList<>();
 
-    private String currentSentence = BEGINNING;
+    private StringBuilder currentSentence = new StringBuilder(BEGINNING);
 
 
     // Registers a new player in the list
-    public void registerPlayer(String name) {
-
+    public void registerPlayer(final String name) {
+        System.out.println("Player '" + name + "' has joined the game!");
+        playerNames.add(name);
     }
 
     // Submits a word for the given user
-    public void submitWord(String name, String word) {
+    public void submitWord(final String name, final String word) {
 
+    }
+
+    // Checks if a name has already been registered
+    public boolean playerExists(final String name) {
+        return playerNames.contains(name);
     }
 
 }
