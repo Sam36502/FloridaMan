@@ -25,6 +25,24 @@ public class FloridaManService {
         System.out.println("Player '" + name + "' has joined the game!");
 
         playerNames.add(name);
+        // TODO[DEBUG]:
+        System.out.println("NumPlayers: " + playerNames.size() + "; Player[0]: " + playerNames.get(0));
+
+        if (currPlayerIndex < 0) {
+            currPlayerIndex = 0;
+        }
+    }
+
+    // De-Registers a player from the list
+    public void deregisterPlayer(final String name) {
+        // TODO[DEBUG]:
+        System.out.println("Player '" + name + "' has left the game!");
+
+        playerNames.remove(name);
+
+        if (playerNames.size() < 1) {
+            currPlayerIndex = -1;
+        }
     }
 
     // Submits a word for the given user
