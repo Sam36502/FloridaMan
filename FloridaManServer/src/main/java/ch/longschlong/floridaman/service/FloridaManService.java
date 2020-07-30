@@ -18,6 +18,7 @@ public class FloridaManService {
 
     // Registers a new player in the list
     public void registerPlayer(final String name) {
+        System.out.println("Player '" + name + "' has joined the game!");
         playerNames.add(name);
     }
 
