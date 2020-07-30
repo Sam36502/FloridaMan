@@ -3,6 +3,7 @@ package ch.longschlong.floridaman.controller;
 import ch.longschlong.floridaman.service.FloridaManService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +33,19 @@ public class FloridaManController {
         return HttpStatus.OK;
     }
 
+    // De-Registers a player from the server
+    // Returns 'HTTP OK' if the player was successfully removed
+    // Returns 'HTTP BAD_REQUEST' if the player isn't present or the request is invalid
+    @DeleteMapping("/connect")
+    public HttpStatus deregisterUser(@RequestParam(name="name") String name) {
+        if (!floridaManService.playerExists(name)) {
+            return HttpStatus.BAD_REQUEST;
+        }
+
+        floridaManService.deregisterPlayer(name);
+        return HttpStatus.OK;
+    }
+
     // Client calls this to submit their next word
     // Returns 'HTTP OK' when word accepted
     // Returns 'HTTP FORBIDDEN' if it's not the player's turn
@@ -50,7 +64,7 @@ public class FloridaManController {
             return HttpStatus.FORBIDDEN;
         }
 
-        submitWord(name, word);
+        floridaManService.submitWord(name, word);
         return HttpStatus.OK;
     }
 
