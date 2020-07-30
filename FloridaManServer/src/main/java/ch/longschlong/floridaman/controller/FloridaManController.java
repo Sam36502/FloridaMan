@@ -42,6 +42,15 @@ public class FloridaManController {
             @RequestParam(name="word") String word
     ) {
 
+        if (! floridaManService.playerExists(name)) {
+            return HttpStatus.BAD_REQUEST;
+        }
+
+        if (! floridaManService.whoseTurn().equals(name)) {
+            return HttpStatus.FORBIDDEN;
+        }
+
+        submitWord(name, word);
         return HttpStatus.OK;
     }
 
