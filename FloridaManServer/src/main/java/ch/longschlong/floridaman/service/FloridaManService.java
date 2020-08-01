@@ -1,5 +1,8 @@
 package ch.longschlong.floridaman.service;
 
+import ch.longschlong.floridaman.utils.Screen;
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.AnsiConsole;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,7 +12,7 @@ import java.util.List;
 public class FloridaManService {
 
     private static final String BEGINNING = "Florida Man";
-
+    private static final List<String> EMPTY_LIST = List.of("No Players");
 
     private List<String> playerNames = new ArrayList<>();
 
@@ -20,29 +23,27 @@ public class FloridaManService {
 
     // Registers a new player in the list
     public void registerPlayer(final String name) {
-
-        // TODO[DEBUG]:
-        System.out.println("Player '" + name + "' has joined the game!");
-
-        playerNames.add(name);
-        // TODO[DEBUG]:
-        System.out.println("NumPlayers: " + playerNames.size() + "; Player[0]: " + playerNames.get(0));
-
         if (currPlayerIndex < 0) {
             currPlayerIndex = 0;
+            playerNames = new ArrayList<>();
         }
+
+        playerNames.add(name);
+        // Draw Screen
+        Screen.display(currentSentence.toString(), playerNames, currPlayerIndex);
     }
 
     // De-Registers a player from the list
     public void deregisterPlayer(final String name) {
-        // TODO[DEBUG]:
-        System.out.println("Player '" + name + "' has left the game!");
-
         playerNames.remove(name);
 
         if (playerNames.size() < 1) {
             currPlayerIndex = -1;
+            playerNames = EMPTY_LIST;
         }
+
+        // Draw Screen
+        Screen.display(currentSentence.toString(), playerNames, currPlayerIndex);
     }
 
     // Submits a word for the given user
@@ -50,13 +51,12 @@ public class FloridaManService {
         String trimmedWord = word.trim();
 
         // Check if round terminated
+        String oldSentence = null;
         if (".".equals(trimmedWord)) {
             currentSentence.append('.');
-            // TODO[DEBUG]:
-            System.out.println("Sentence Finished: " + currentSentence);
+            oldSentence = currentSentence.toString();
 
             // TODO: Send finished sentence to archive API
-
 
             currentSentence = new StringBuilder(BEGINNING);
 
@@ -70,10 +70,9 @@ public class FloridaManService {
         if (currPlayerIndex == playerNames.size()) {
             currPlayerIndex = 0;
         }
-        // TODO[DEBUG]:
-        System.out.println("It's now " + playerNames.get(currPlayerIndex) + "'s turn.");
 
-        // TODO: Refresh screen
+        // Draw Screen
+        Screen.display(currentSentence.toString(), playerNames, currPlayerIndex, oldSentence);
     }
 
     // Checks if a name has already been registered
