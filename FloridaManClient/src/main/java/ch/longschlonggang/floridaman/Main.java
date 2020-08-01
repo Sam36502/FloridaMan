@@ -2,8 +2,11 @@ package ch.longschlonggang.floridaman;
 
 import ch.longschlonggang.floridaman.utils.AnsiUtils;
 import ch.longschlonggang.floridaman.utils.Colour;
+import ch.longschlonggang.floridaman.utils.HttpClient;
 import org.fusesource.jansi.AnsiConsole;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class Main {
@@ -41,7 +44,7 @@ public class Main {
                             " [4] Quit\n",
                     4, 16
             );
-            System.out.print("\n > ");
+            System.out.print("\n     > ");
 
             int opt;
             try {
@@ -95,6 +98,79 @@ public class Main {
 
     private static void joinGame() {
 
+        //TODO DEBUG:
+        HttpClient.registerUser("http://localhost:8080", "jimmy");
+
+
+    }
+
+    // Displays an error message
+    public static void errorMsg(String msg) {
+        errorMsg(msg, null);
+    }
+
+    // Displays an error message with exception information
+    public static void errorMsg(String msg, Exception e) {
+        // Break up message if it's too long
+        if (msg.length() > 100) {
+            String newMsg = "";
+            for (int i=0; i<msg.length(); i++) {
+                newMsg += msg.charAt(i);
+                if (i > 0 && i % 100 == 0) newMsg += "\n";
+            }
+            msg = newMsg;
+            newMsg = null;
+        }
+
+        // Check if an exception was passed
+        if (e != null) {
+            String exc = e.toString();
+
+            // Break up exception message if it's too long
+            if (exc.length() > 100) {
+                String newExc = "";
+                for (int i=0; i<exc.length(); i++) {
+                    newExc += exc.charAt(i);
+                    if (i > 0 && i % 100 == 0) newExc += "\n";
+                }
+                exc = newExc;
+                newExc = null;
+            }
+
+            msg += "" +
+                    "\n" +
+                    "\n" + exc +
+                    "\n" +
+                    "\n  Please notify the developers if you see this.  " +
+                    "\n      Press [Enter] to close error message.";
+        } else {
+            msg += "" +
+                    "\n" +
+                    "\n  Please notify the developers if you see this.  " +
+                    "\n      Press [Enter] to close error message.";
+        }
+
+        String[] lines = msg.split("\\n");
+        int width = Arrays.stream(lines).max(Comparator.comparing(String::length)).get().length();
+
+        // Put error message in an ASCII-art box
+        String formattedMsg = "+--[ ERROR ]";
+        for (int i=0;i<width-9;i++) formattedMsg += "-";
+        formattedMsg += "+\n";
+        for (String s: lines) {
+            formattedMsg += "| " + s;
+            for (int x=0;x<width-s.length();x++) formattedMsg += " ";
+            formattedMsg += " |\n";
+        }
+        formattedMsg += "+";
+        for (int i=0;i<width+2;i++) formattedMsg += "-";
+        formattedMsg += "+";
+
+        AnsiUtils.setCursorColour(Colour.BRIGHT_RED, Colour.BLACK);
+        AnsiUtils.printWithMargins(formattedMsg, 10, 5);
+        AnsiUtils.resetCursorColour();
+
+        input.nextLine();
     }
 
 }
