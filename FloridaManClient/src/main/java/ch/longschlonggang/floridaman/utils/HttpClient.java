@@ -50,7 +50,7 @@ public class HttpClient {
     //
 
     // Registers a user with the server
-    public static void registerUser(String url, String name) {
+    public static int registerUser(String url, String name) {
         URIBuilder builder = null;
         URI uri = null;
         try {
@@ -63,14 +63,17 @@ public class HttpClient {
         }
 
         // Handle Statuses
-        switch (sendPostRequest(uri)) {
+        int status = sendPostRequest(uri);
+        switch (status) {
             case 403:
                 Main.errorMsg("That name is already taken");
                 break;
 
             case 400:
                 Main.errorMsg("An error occurred while registering the user on the server.");
+                break;
         }
+        return status;
     }
 
     // Submits a word to the server
@@ -116,6 +119,19 @@ public class HttpClient {
             case 400:
                 Main.errorMsg("Attempted to disconnect '" + name + "' from server, but failed.");
         }
+    }
+
+    // Check server is reachable
+    public static boolean serverReachable(String url) {
+        HttpPost post = new HttpPost(url);
+        CloseableHttpClient client = HttpClientBuilder.create().build();
+        boolean isReachable = true;
+        try {
+            client.execute(post);
+        } catch (IOException e) {
+            isReachable = false;
+        }
+        return isReachable;
     }
 
 }
