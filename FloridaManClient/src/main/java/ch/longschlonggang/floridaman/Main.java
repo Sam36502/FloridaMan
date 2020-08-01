@@ -43,7 +43,7 @@ public class Main {
             );
             System.out.print("\n > ");
 
-            int opt = 0;
+            int opt;
             try {
                 opt = Integer.parseInt(input.nextLine());
             } catch (NumberFormatException e) {

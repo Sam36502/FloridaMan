@@ -12,10 +12,6 @@ public class AnsiUtils {
         System.out.print(Ansi.ansi().cursor(row, col));
     }
 
-    public static void printWithMargins(String str, int leftMargin) {
-        printWithMargins(str, leftMargin, 0);
-    }
-
     public static void printWithMargins(String str, int leftMargin, int topMargin) {
         String[] strs = str.split("\\n");
         setCursorPos(topMargin, leftMargin);
@@ -30,16 +26,16 @@ public class AnsiUtils {
     }
 
     public static void setCursorColour(Colour fg, Colour bg) {
-        if (fg.isBright) {
-            System.out.print(Ansi.ansi().fgDefault().fgBright(fg.ansiColour));
+        if (fg.isBright()) {
+            System.out.print(Ansi.ansi().fgDefault().fgBright(fg.getAnsiColour()));
         } else {
-            System.out.print(Ansi.ansi().fgDefault().fg(fg.ansiColour));
+            System.out.print(Ansi.ansi().fgDefault().fg(fg.getAnsiColour()));
         }
 
-        if (bg.isBright) {
-            System.out.print(Ansi.ansi().bgDefault().bgBright(bg.ansiColour));
+        if (bg.isBright()) {
+            System.out.print(Ansi.ansi().bgDefault().bgBright(bg.getAnsiColour()));
         } else {
-            System.out.print(Ansi.ansi().bgDefault().bg(bg.ansiColour));
+            System.out.print(Ansi.ansi().bgDefault().bg(bg.getAnsiColour()));
         }
     }
 

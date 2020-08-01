@@ -13,13 +13,13 @@ repositories {
 task fatJar(type: Jar) {
     manifest {
         attributes 'Implementation-Title': 'Florida Man Client',
-                'Implementation-Version': version,
+                'Implementation-Version': archiveVersion,
                 'Main-Class': 'ch.longschlonggang.floridaman.Main'
     }
-    baseName = project.name
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
+task
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'

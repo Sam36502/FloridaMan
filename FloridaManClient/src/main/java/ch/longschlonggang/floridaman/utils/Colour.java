@@ -10,8 +10,8 @@ import org.fusesource.jansi.Ansi;
  */
 public class Colour {
 
-    Ansi.Color ansiColour;
-    boolean isBright;
+    private Ansi.Color ansiColour;
+    private boolean isBright;
 
     private Colour(Ansi.Color ansiColour, boolean isBright) {
         this.ansiColour = ansiColour;
