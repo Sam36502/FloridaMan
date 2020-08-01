@@ -19,28 +19,37 @@ public class Screen {
     private static final int PLAYERS_TOP_MARGIN = 5;
     private static final Ansi.Color TEXT_FG = Ansi.Color.WHITE;
     private static final Ansi.Color TEXT_BG = Ansi.Color.BLACK;
-    private static final Ansi.Color SENTENCE_FG = Ansi.Color.WHITE;
+
+    private static final Ansi.Color SENTENCE_FG = Ansi.Color.MAGENTA;
     private static final Ansi.Color SENTENCE_BG = Ansi.Color.BLACK;
-    private static final Ansi.Color SELECTED_FG = Ansi.Color.BLACK;
-    private static final Ansi.Color SELECTED_BG = Ansi.Color.WHITE;
+
+    private static final Ansi.Color COMPLETE_FG = Ansi.Color.RED;
+    private static final Ansi.Color COMPLETE_BG = Ansi.Color.BLACK;
+
+    private static final Ansi.Color SELECTED_FG = Ansi.Color.CYAN;
+    private static final Ansi.Color SELECTED_BG = Ansi.Color.BLACK;
 
     public static void display (String sentence, List<String> names, int nameIndex, String oldSentence) {
         clearScreen();
 
         // Display Current Sentence
-        setColour(SENTENCE_FG, SENTENCE_BG);
         setCursorPos(LEFT_MARGIN, SENTENCE_TOP_MARGIN);
         System.out.print("Current Sentence:");
+        setColour(SENTENCE_FG, SENTENCE_BG);
         setCursorPos(LEFT_MARGIN, SENTENCE_TOP_MARGIN + 1);
         System.out.print(sentence);
+        setColour(TEXT_FG, TEXT_BG);
+
+        // Display Finished Sentence if present
         if (oldSentence != null) {
 
             setCursorPos(LEFT_MARGIN, SENTENCE_TOP_MARGIN - 2);
-            setColour(SENTENCE_FG, SENTENCE_BG);
-            System.out.print("Completed Sentence: " + oldSentence);
+            System.out.print("Completed Sentence: ");
+            setColour(COMPLETE_FG, COMPLETE_BG);
+            System.out.print(oldSentence);
+            setColour(TEXT_FG, TEXT_BG);
 
         }
-        setColour(TEXT_FG, TEXT_BG);
 
         // Display List of players
         setCursorPos(LEFT_MARGIN, SENTENCE_TOP_MARGIN + SENTENCE_MAX_HEIGHT + PLAYERS_TOP_MARGIN);
@@ -70,7 +79,7 @@ public class Screen {
     }
 
     private static void setColour(Ansi.Color fg, Ansi.Color bg) {
-        System.out.print(Ansi.ansi().fg(fg).bg(bg));
+        System.out.print(Ansi.ansi().fgDefault().bgDefault().fg(fg).bg(bg));
     }
 
     private static void clearScreen() {
