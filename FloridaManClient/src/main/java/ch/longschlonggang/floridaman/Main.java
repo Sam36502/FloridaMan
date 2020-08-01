@@ -98,9 +98,58 @@ public class Main {
 
     private static void joinGame() {
 
-        //TODO DEBUG:
-        HttpClient.registerUser("http://localhost:8080", "jimmy");
+        // Find Server
+        String url = null;
+        while (url == null) {
+            AnsiUtils.clearScreen();
+            AnsiUtils.setCursorColour(Colour.BRIGHT_BLUE, Colour.BLACK);
+            AnsiUtils.printWithMargins("Enter the Server URL or 'exit' to return to main menu:", 4, 2);
+            AnsiUtils.resetCursorColour();
+            System.out.print(" > ");
 
+            url = "http://" + input.nextLine() + ":8080";
+            if ("http://exit:8080".equals(url)) return;
+            if (! HttpClient.serverReachable(url)) url = null;
+
+            if (url == null) {
+                errorMsg("Unable connect to '" + url + "'.");
+            }
+        }
+
+        // Register Username
+        String name = null;
+        while (name == null) {
+            AnsiUtils.clearScreen();
+            AnsiUtils.setCursorColour(Colour.BRIGHT_BLUE, Colour.BLACK);
+            AnsiUtils.printWithMargins("Enter your username or 'exit' to return to main menu:", 4, 2);
+            AnsiUtils.resetCursorColour();
+            System.out.print(" > ");
+
+            name = input.nextLine();
+            if ("exit".equals(name)) return;
+
+            int status = HttpClient.registerUser(url, name);
+            if (status == 400 || status == 403) name = null;
+        }
+
+        // Submit words
+        boolean stillPlaying = true;
+        while (stillPlaying) {
+            AnsiUtils.clearScreen();
+            AnsiUtils.setCursorColour(Colour.BRIGHT_BLUE, Colour.BLACK);
+            AnsiUtils.printWithMargins("Enter your word to submit or 'exit' to return to main menu:", 4, 2);
+            AnsiUtils.resetCursorColour();
+            System.out.print(" > ");
+
+            String word = input.nextLine();
+            if ("exit".equals(word)) {
+                HttpClient.deregisterUser(url, name);
+                stillPlaying = false;
+                continue;
+            }
+
+            HttpClient.submitWord(url, name, word);
+        }
 
     }
 
@@ -146,8 +195,7 @@ public class Main {
         } else {
             msg += "" +
                     "\n" +
-                    "\n  Please notify the developers if you see this.  " +
-                    "\n      Press [Enter] to close error message.";
+                    "\n  Press [Enter] to close error message.  ";
         }
 
         String[] lines = msg.split("\\n");
